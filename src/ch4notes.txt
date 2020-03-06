@@ -1,0 +1,27 @@
+Chapter 4 Notes
+There are 3 core APIs:
+Datasets
+DataFrames
+SQL tables and views
+Majority of APIs apply to both batch and streaming computation
+Schema defines column names and types
+Internally Spark uses an engine called Catalyst
+Catalyst manages its own type information
+Several optimizations
+Spark maps Catalyst types to language specific types, depending on the API language
+i.e. if you use Python, operations and types will be translated, then executed on Spark Catalyst types, not Python types
+Datasets vs DataFrames
+Datasets are "typed" - Spark checks types at Compile time
+DataFrames are "untyped" - Spark only checks them at runtime
+To Spark (Scala), DataFrames are simply Datasets with type Row
+In Python, there is no Dataset
+Use Datasets if you need strict Compile-time type checking, otherwise use DataFrames
+StructType (roughly, a single row) -> an array of StructFields
+StrucField is (name, dataType, [nullable])
+Overview of Structured API Execution:
+1. Write Spark code
+2. If valid code, Spark converts to a Logical Plan
+3. Spark transforms Logical Plan to Physical Plan - optimization happens here
+4. Spark executes Physical Plan as RDD manipulations on the cluster
+Spark acts like a compiler:
+It takes queries from user and compiles them into RDD transformations in native Java bytecod
