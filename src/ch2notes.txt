@@ -1,0 +1,38 @@
+Chapter 2 Notes:
+A Gentle Introduction to Spark
+
+Spark uses cluster: pooled resources of many computers
+A framework is needed to make this work and apply constrol stuctures
+Spark is this framework
+Spark's standalone cluster manager is YARN (or Mesos)
+We submit applications to these managers, which grant resources to our application
+Applications consist of driver and executor processes
+Driver processes main() function, sits on a node on the cluster
+The driver can be "driven" through one of the Spark APIs: Scala, Java, Python, SQL, R
+There is a SparkSession object available to users
+This is the entrance point to running Spark code
+In Scala and Python, the SparkSession is assigned as the variable "spark"
+Core abstractions: DataFrame, Dataset, SQL Table, RDD
+DataFrame is are easiest and mose efficient
+Data divided into partitions: paralellism
+With DataFrames, the Spark cluster manager controls this process
+With RDD, you can interact with this low level functionality
+Core workflow: execute transformations on an immutable data structure to produce a new data structure
+Narrow transformations: each input partition contributes to only one output partition
+Wide transformation: each input partition contributes to many output partitions
+With narrrow transformations, Spark will authomatically perform pipelining: performing in memory
+With shuffles (wide) Spark writes the results to disk
+Lazy execution: allows Spark to optimize
+example: predicate pushdown prevents a large computation when a filter to small dataset is specified at the end
+An action triggers a transformation
+count() is the most simple action
+Can call explain() on any DataFrame to see how Spark will execute the transformation
+exchange and filescan are keywords indicating a wide transformation
+Dy default Spark outputs 200 shuffle partitions when we perform a shuffle
+The logical plan of transformations defines a lineage for the Dataframe
+At any point, Spark can recompute any partition by performing the all of the operations up to that point
+Functional programming; the same input must always produce the same output
+There is no performance difference between using DataFrames and using SQL
+They compile down to the same logical and execution plans
+Can make any DataFrame into a "table" with df.createOrReplaceTempView("name")
+
