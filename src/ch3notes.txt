@@ -1,0 +1,18 @@
+Chapter 3: A Tour of Spark's Toolset
+
+Spark-submit is a command line tool for running applications
+Dataset is Type-safe, structured API
+Not available in Python or R
+One can move between Datasets and DataFrames easily
+Can enforce type-safety when needed
+Structured Streaming: Run operations in a streaming-fashion
+This can reduce latency and allow for incremental processing
+Extract value out of streaming systems with virtually no code changes
+Can easily convert batch job to streaming job
+MLLib: there are two object-types for every algorithm
+example: KMeans, KMeansModel
+The second one always refers to a trained model 
+Estimators (algorithms) can go straight into the pipeline
+RDDs: virtually everything in Spark in built on RDDs
+Structured APIs cover most use cases and are optmized
+Use RDD API when necessary 
