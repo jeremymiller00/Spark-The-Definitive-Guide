@@ -1,0 +1,25 @@
+Chapter 5: Basic Structured Operations
+Fundamental DataFrame operations
+DataFrame is a series of records that are of type Row
+Columns represent expressions that can be performed on each row
+Schema defines name and type of each column
+Partitionaing is layout of DataFrame across cluster
+Columns can be manipulated with expressions
+To Spark, columns are logical constructions that represent a value computed on a per-record basis by means of an expression
+Cannot manipulate columns outside the context of a DataFrame
+Reference a column using the 'col' function
+Scala Shortcuts: $"colname", 'colname
+Expressions can be created simply by using 'expr' function
+expr("comeCol - 5") === col("someCol") - 5 === expr("someCol") - 5
+expr("Takes SQL statements")
+These compile to the same logical plan as equivalent DF expressions
+Can create rows manually (but why?)
+Items in a row can be referenced by index, but in Scala helper methods must be used to coerce types
+myRow(0) // type any
+myRow(0).asInstanceOf[String] // string
+myRow(2).getString() // string
+myRow(2).getInt() // int
+If interpreted as a literal and not an expression, we do not need to escape special characters
+Filter and Where are equivalent
+Multiple AND filters should be chained (not in the same function call)
+This allows Spark to execute most efficiently
