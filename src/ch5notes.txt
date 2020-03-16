@@ -3,7 +3,7 @@ Fundamental DataFrame operations
 DataFrame is a series of records that are of type Row
 Columns represent expressions that can be performed on each row
 Schema defines name and type of each column
-Partitionaing is layout of DataFrame across cluster
+Partitioning is layout of DataFrame across cluster
 Columns can be manipulated with expressions
 To Spark, columns are logical constructions that represent a value computed on a per-record basis by means of an expression
 Cannot manipulate columns outside the context of a DataFrame
@@ -23,3 +23,8 @@ If interpreted as a literal and not an expression, we do not need to escape spec
 Filter and Where are equivalent
 Multiple AND filters should be chained (not in the same function call)
 This allows Spark to execute most efficiently
+"sortWithinPartitions" is a narrow transformation; "sort" is a wide transformation
+Repartition the data according to some frequently filtered columns
+Repartition will ALWAYS create a shuffle (even if not strictly necessary)
+Coalesce will not shuffle, but combine into a specified number of partitions 
+
