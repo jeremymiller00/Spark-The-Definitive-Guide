@@ -20,7 +20,7 @@ With RDD, you can interact with this low level functionality
 Core workflow: execute transformations on an immutable data structure to produce a new data structure
 Narrow transformations: each input partition contributes to only one output partition
 Wide transformation: each input partition contributes to many output partitions
-With narrrow transformations, Spark will authomatically perform pipelining: performing in memory
+With narrrow transformations, Spark will automatically perform pipelining: performing in memory
 With shuffles (wide) Spark writes the results to disk
 Lazy execution: allows Spark to optimize
 example: predicate pushdown prevents a large computation when a filter to small dataset is specified at the end
