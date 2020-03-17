@@ -1,0 +1,12 @@
+Chapter 6: Working with Different Types of Data
+Most documents for DataFrame are actually under Dataset
+DataFrame is simply Dataset with type Row
+http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.sql.package
+
+There are some methods specifically for DataFrame
+org.apache.spark.sql.functions has lots of stuff!
+lit() converts a type in another language to its corresponding Spark representation
+Don't use AND, just chain together multiple filter calls
+This allows Catalyst to do its optimization
+Gotcha: working with nulls and boolean expressions
+there are nullSafe methods (usually)
