@@ -10,3 +10,13 @@ Don't use AND, just chain together multiple filter calls
 This allows Catalyst to do its optimization
 Gotcha: working with nulls and boolean expressions
 there are nullSafe methods (usually)
+
+Dates and Times
+Spark tries to keep it simple by using two types: Dates, timestamps
+Timestamps are often stored as strings, conversion needed
+Use the function *to_date* to convert string to date 
+Spark will not throw an error if it fails to parse a date string
+It will simply return null  
+to_timestamp ALWAYS requires the format to be specified
+Nulls: even when schema specifies that a column does not allow nulls, Spark will not enforce This
+It is merely for optimization
