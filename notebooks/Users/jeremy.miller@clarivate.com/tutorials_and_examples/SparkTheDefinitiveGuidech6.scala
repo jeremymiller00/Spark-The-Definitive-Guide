@@ -290,3 +290,28 @@ df.na.drop("all", Seq("StockCode", "InvoiceNo")).show // apply to a subset of co
 
 // COMMAND ----------
 
+// MAGIC %md ### Fill NA
+// MAGIC * Specify a map
+
+// COMMAND ----------
+
+df.na.fill("All null values become this string").show
+
+// COMMAND ----------
+
+df.na.fill(5, Seq("StockCode", "InvoiceNo")).show // all null int values become 5 
+
+// COMMAND ----------
+
+df.printSchema
+
+// COMMAND ----------
+
+val meanPrice = df.select(mean("UnitPrice")).first()(0).toString.toDouble
+
+// COMMAND ----------
+
+df.na.fill(meanPrice, Seq("UnitPrice")).show
+
+// COMMAND ----------
+
