@@ -20,3 +20,14 @@ It will simply return null
 to_timestamp ALWAYS requires the format to be specified
 Nulls: even when schema specifies that a column does not allow nulls, Spark will not enforce This
 It is merely for optimization
+
+There are three types of complex types: struct, array, map
+You can think of Struct as DataFrame within DataFrame
+
+UDF allow you to write your own transformations
+BUT use predefined if possible; they have been optimized
+If you write a UDF in Python, spark creates a Python process, executes your UDF on ALL ROWS, and then returns them to the JVM
+Triggers eager evaluation
+Once data is serialized to Python, Spark can no longer manage the workers processes
+BUT if you write your UDF in Scala, you can still use it in Python, if you register it as a SQL function and use selectExpr
+
