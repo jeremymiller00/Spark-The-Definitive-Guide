@@ -95,6 +95,11 @@ df.select(expr("CustomerId"), fabricatedQuantity.alias("realQuantity")).show(5)
 
 // COMMAND ----------
 
+// same result without a separate expression
+df.select(expr("CustomerId"), (pow(col("Quantity") * col("UnitPrice"), 2) + 5).alias("realQuantity")).show(5)
+
+// COMMAND ----------
+
 df.select(round(col("UnitPrice"), 1).alias("rounded"), col("UnitPrice")).show(5)
 
 // COMMAND ----------
@@ -312,6 +317,124 @@ val meanPrice = df.select(mean("UnitPrice")).first()(0).toString.toDouble
 // COMMAND ----------
 
 df.na.fill(meanPrice, Seq("UnitPrice")).show
+
+// COMMAND ----------
+
+// MAGIC %md ## Working with Complex Types
+// MAGIC * Struct - create one by wrapping a set of columns in parentheses
+// MAGIC * Array
+// MAGIC * Map
+
+// COMMAND ----------
+
+df.selectExpr("(Description, InvoiceNo) as complex").show(5, false)
+
+// COMMAND ----------
+
+df.selectExpr("struct(Description, InvoiceNo) as complex").show(5, false)
+
+// COMMAND ----------
+
+val complexDF = df.select(struct("Description", "InvoiceNo").as("complex"))
+complexDF.createOrReplaceTempView("complexDF")
+display(complexDF)
+
+// COMMAND ----------
+
+// MAGIC %md ## We can query this 'inner' dataframe
+
+// COMMAND ----------
+
+display(complexDF.select("complex.Description", "complex.InvoiceNo"))
+
+// COMMAND ----------
+
+display(complexDF.select("complex.*"))
+
+// COMMAND ----------
+
+// MAGIC %md ## Split into an array
+// MAGIC * Can query using Python-like syntax
+
+// COMMAND ----------
+
+df.select(split(col("Description"), " ")).show(2, false)
+
+// COMMAND ----------
+
+display(df.select(split(col("Description"), " ").as("array_col")).selectExpr("array_col[1]"))
+
+// COMMAND ----------
+
+df.select($"Description", size(split(col("Description"), " "))).show(5, false)
+
+// COMMAND ----------
+
+df.select($"Description", array_contains(split(col("Description"), " "), "WHITE").as("has_white")).show(10, false)
+
+// COMMAND ----------
+
+// MAGIC %md ## Explode converts a complex type to a set of rows
+
+// COMMAND ----------
+
+display(df.withColumn("splitted", split(col("Description"), " ")).withColumn("exploded", explode(col("splitted"))).select("Description", "InvoiceNo", "exploded"))
+
+// COMMAND ----------
+
+// MAGIC %md ## Creating Maps
+// MAGIC * can also query with Python-like syntax
+
+// COMMAND ----------
+
+df.select(map(col("Description"), col("InvoiceNo")).as("complex_map")).show(5, false)
+
+// COMMAND ----------
+
+df.select(map(col("Description"), col("InvoiceNo")).as("complex_map")).selectExpr("complex_map['WHITE METAL LANTERN']").show(5, false)
+
+// COMMAND ----------
+
+df.select(map(col("Description"), col("InvoiceNo")).as("complex_map")).selectExpr("explode(complex_map)").show(5, false)
+
+// COMMAND ----------
+
+// MAGIC %md ## UDFs
+// MAGIC * Create a function that takes one or more columns as input and returns one or more columns as output
+
+// COMMAND ----------
+
+val udfExampleDF = spark.range(5).toDF("num")
+def power3(num: Double): Double = num * num * num
+val powerUDF = udf(power3(_:Double): Double)
+
+// COMMAND ----------
+
+udfExampleDF.select(powerUDF(col("num"))).show
+
+// COMMAND ----------
+
+// to register as SQL function - so you can use with Python
+spark.udf.register("power3", power3(_:Double): Double)
+
+// COMMAND ----------
+
+// MAGIC %python
+// MAGIC # forcing return types when registering with SQL
+// MAGIC from pyspark.sql.types import IntegerType, DoubleType
+// MAGIC def power3():
+// MAGIC   return num * num * num
+// MAGIC spark.udf.register("power3py", power3, DoubleType())
+
+// COMMAND ----------
+
+// MAGIC %sql
+// MAGIC select power3(12)
+
+// COMMAND ----------
+
+// MAGIC %sql
+// MAGIC select power3py(12)
 
 // COMMAND ----------
 
