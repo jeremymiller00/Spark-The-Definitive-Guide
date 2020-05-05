@@ -3,6 +3,7 @@ There are 3 core APIs:
 Datasets
 DataFrames
 SQL tables and views
+
 Majority of APIs apply to both batch and streaming computation
 Schema defines column names and types
 Internally Spark uses an engine called Catalyst

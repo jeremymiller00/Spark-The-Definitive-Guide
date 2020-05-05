@@ -14,5 +14,5 @@ example: KMeans, KMeansModel
 The second one always refers to a trained model 
 Estimators (algorithms) can go straight into the pipeline
 RDDs: virtually everything in Spark in built on RDDs
-Structured APIs cover most use cases and are optmized
+Structured APIs cover most use cases and are optimized
 Use RDD API when necessary 
